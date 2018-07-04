@@ -1,10 +1,11 @@
 import tensorflow as tf
+import numpy as np
 # VGG16 output class number 1000 -> weights: 137,557,696
 
 def max_pool(x, name):
-	return tf.layers.MaxPooling2D(x, 2, 2, padding='same', name=name)
+	return tf.layers.max_pooling2d(x, pool_size=2, strides=2, padding='same', name=name)
 
-def dropout(x, keepPro, name):
+def dropout(x, keepPro, name=None):
 	return tf.nn.dropout(x, keepPro, name)
 
 def conv_layer(x, f, size, name):
@@ -24,10 +25,11 @@ def fc_layer(x, inputD, outputD, name, relu=False):
 		return out
 
 class Vgg:
-	def __init__(self, im, class_num, isvgg19):
+	def __init__(self, im, class_num, isvgg19, modelpath):
 		self.input_x = im
 		self.class_num = class_num
 		self.vgg19 = isvgg19
+		self.modelpath = modelpath
 
 	def build(self):
 		# 224x224x3 -> 224x224x64 -> 224x224x64 -> 112x112x64
@@ -55,7 +57,7 @@ class Vgg:
 		conv4_2 = conv_layer(conv4_1, 512, 3, name='conv4_2')
 		conv4_3 = conv_layer(conv4_2, 512, 3, name='conv4_3')
 		if self.vgg19:
-			conv4_4 = conv_layer(conv4_3, 512, name='conv4_4')
+			conv4_4 = conv_layer(conv4_3, 512, 3, name='conv4_4')
 			pool4 = max_pool(conv4_4, name='pool4')
 		else:
 			pool4 = max_pool(conv4_3, name='pool4')
@@ -73,16 +75,35 @@ class Vgg:
 		fc_in = tf.reshape(pool5, [-1, 7*7*512])
 		# 7*7*512 -> 4096
 		fc6 = fc_layer(fc_in, 7*7*512, 4096, name='fc6', relu=True)
-		dropout1 = dropout(fc6, 0.5)
+		dropout1 = dropout(fc6, 1.0)
 
 		# 4096 -> 4096
 		fc7 = fc_layer(dropout1, 4096, 4096, name='fc7', relu=True)
-		dropout2 = dropout(fc7, 0.5)
+		dropout2 = dropout(fc7, 1.0)
 
 		# 4096 -> class number
 		fc8 = fc_layer(dropout2, 4096, self.class_num, name='fc8', relu=False)
 
-		self.prob = tf.nn.softmax(fc8, name='prob')
+		prob = tf.nn.softmax(fc8, name='prob')
+		return prob
+
+	def loadModel(self, sess):
+		wData = np.load(self.modelpath, encoding='bytes').item()
+		for name in wData:
+			with tf.variable_scope(name, reuse=True):
+				for p in wData[name]:
+					if len(p.shape) == 1:
+						# bias
+						if name.startswith('conv'):
+							sess.run(tf.get_variable(name+'/bias', trainable=False).assign(p))
+						else:
+							sess.run(tf.get_variable('b', trainable=False).assign(p))
+					else:
+						# weights
+						if name.startswith('conv'):
+							sess.run(tf.get_variable(name+'/kernel', trainable=False).assign(p))
+						else:
+							sess.run(tf.get_variable('w', trainable=False).assign(p))
 
 
 
