@@ -50,9 +50,9 @@
  * 不算pool一共有19层网络，因为叫做vgg19
 
 ### vgg16和vgg19使用原作者的weights进行predict
-./python test.py vgg16/vgg19 {weights path} {predict file path}
-(292, 0.74020416, 'tiger, Panthera tigris')
-(282, 0.25786862, 'tiger cat')
-(290, 0.00097516429, 'jaguar, panther, Panthera onca, Felis onca')
-(340, 0.00023462022, 'zebra')
-(288, 0.0001896271, 'leopard, Panthera pardus')
+#### ./python test.py vgg16/vgg19 {weights path} {predict file path}
+#### (292, 0.74020416, 'tiger, Panthera tigris')
+#### (282, 0.25786862, 'tiger cat')
+#### (290, 0.00097516429, 'jaguar, panther, Panthera onca, Felis onca')
+#### (340, 0.00023462022, 'zebra')
+#### (288, 0.0001896271, 'leopard, Panthera pardus')
