@@ -85,7 +85,7 @@ class Vgg:
 		fc8 = fc_layer(dropout2, 4096, self.class_num, name='fc8', relu=False)
 
 		prob = tf.nn.softmax(fc8, name='prob')
-		return prob
+		return prob, fc8
 
 	def loadModel(self, sess):
 		wData = np.load(self.modelpath, encoding='bytes').item()
@@ -105,5 +105,7 @@ class Vgg:
 						else:
 							sess.run(tf.get_variable('w', trainable=False).assign(p))
 
-
+	def losses(self, labels, logits):
+		loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=self.fc8)
+		return loss
 

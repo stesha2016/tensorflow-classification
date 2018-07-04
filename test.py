@@ -2,7 +2,7 @@ import sys
 import tensorflow as tf
 import numpy as np
 import networks.vgg as vgg
-import networks.utils as utils
+import src.utils as utils
 
 def test_vgg(fn, model, vgg19=False):
 	print('test_vgg', fn)
