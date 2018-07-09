@@ -25,7 +25,7 @@ def fc_layer(x, inputD, outputD, name, relu=False):
 		return out
 
 class Vgg:
-	def __init__(self, im, class_num, isvgg19, modelpath):
+	def __init__(self, im, class_num, isvgg19, modelpath='./models/vgg16.npy'):
 		self.input_x = im
 		self.class_num = class_num
 		self.vgg19 = isvgg19
@@ -75,11 +75,11 @@ class Vgg:
 		fc_in = tf.reshape(pool5, [-1, 7*7*512])
 		# 7*7*512 -> 4096
 		fc6 = fc_layer(fc_in, 7*7*512, 4096, name='fc6', relu=True)
-		dropout1 = dropout(fc6, 1.0)
+		dropout1 = dropout(fc6, 0.5)
 
 		# 4096 -> 4096
 		fc7 = fc_layer(dropout1, 4096, 4096, name='fc7', relu=True)
-		dropout2 = dropout(fc7, 1.0)
+		dropout2 = dropout(fc7, 0.5)
 
 		# 4096 -> class number
 		fc8 = fc_layer(dropout2, 4096, self.class_num, name='fc8', relu=False)
@@ -106,6 +106,13 @@ class Vgg:
 							sess.run(tf.get_variable('w', trainable=False).assign(p))
 
 	def losses(self, labels, logits):
-		loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=self.fc8)
+		loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits))
+		#loss = tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits)
 		return loss
+
+	def accurracy(self, labels, logits):
+		prediction = tf.to_int64(tf.argmax(logits, 1))
+		correct_prediction = tf.equal(prediction, tf.argmax(labels,1))
+		accurracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+		return accurracy
 

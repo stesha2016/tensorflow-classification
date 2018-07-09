@@ -1,7 +1,7 @@
 import os
 
-ROOT = './data/my_vgg_data/train/'
-f = open('./data/my_vgg_data/train.txt', 'w')
+ROOT = './data/my_vgg_data/val/'
+f = open('./data/my_vgg_data/val.txt', 'w')
 for classes in os.listdir(ROOT):
 	subpath = ROOT + classes + '/'
 	print(subpath)
