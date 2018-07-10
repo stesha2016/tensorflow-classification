@@ -87,7 +87,7 @@ class Vgg:
 		prob = tf.nn.softmax(fc8, name='prob')
 		return prob, fc8
 
-	def loadModel(self, sess):
+	def loadModel(self, sess, isFineTuring=False):
 		wData = np.load(self.modelpath, encoding='bytes').item()
 		for name in wData:
 			with tf.variable_scope(name, reuse=True):
@@ -96,13 +96,13 @@ class Vgg:
 						# bias
 						if name.startswith('conv'):
 							sess.run(tf.get_variable(name+'/bias', trainable=False).assign(p))
-						else:
+						elif (not name.startswith('fc8')) or (not isFineTuring):
 							sess.run(tf.get_variable('b', trainable=False).assign(p))
 					else:
 						# weights
 						if name.startswith('conv'):
 							sess.run(tf.get_variable(name+'/kernel', trainable=False).assign(p))
-						else:
+						elif (not name.startswith('fc8')) or (not isFineTuring):
 							sess.run(tf.get_variable('w', trainable=False).assign(p))
 
 	def losses(self, labels, logits):
@@ -115,4 +115,3 @@ class Vgg:
 		correct_prediction = tf.equal(prediction, tf.argmax(labels,1))
 		accurracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 		return accurracy
-
