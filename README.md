@@ -35,6 +35,6 @@
    (340, 0.00023462022, 'zebra')
    (288, 0.0001896271, 'leopard, Panthera pardus')
  ### 用vgg网络对自己的数据进行training
-   1. 整个网络training：python train.py vgg16/vgg19 ./data/my_vgg_data/train.txt
-   2. 只对最后一层fine turn：
+   1. 整个网络training：python train.py vgg16/vgg19
+   2. 只对最后一层fine turn：python train.py vgg16/vgg19 {any}
    
