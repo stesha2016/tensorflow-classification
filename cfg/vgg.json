@@ -1,0 +1,13 @@
+{
+	"net": "vgg",
+	"batchsize": 16,
+	"width": 224,
+	"height": 224,
+	"learningrate": 0.001,
+	"valpath": "./data/my_vgg_data/val.txt",
+	"trainpath": "./data/my_vgg_data/train.txt",
+	"modelpath": "./models/vgg19.npy",
+	"mean": [103.939, 116.779, 123.68],
+	"fineturn": "true",
+	"isvgg19": "true"
+}

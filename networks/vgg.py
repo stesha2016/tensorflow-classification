@@ -24,7 +24,7 @@ def fc_layer(x, inputD, outputD, name, relu=False):
 			out = tf.nn.relu(out)
 		return out
 
-class Vgg:
+class Vgg():
 	def __init__(self, im, class_num, isvgg19, modelpath='./models/vgg16.npy'):
 		self.input_x = im
 		self.class_num = class_num
