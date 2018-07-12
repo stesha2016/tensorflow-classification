@@ -20,11 +20,20 @@ $ (340, 0.00023462022, 'zebra')
 $ (288, 0.0001896271, 'leopard, Panthera pardus')
 ```
  ### 用vgg网络对自己的数据进行training
- 1. 对整个网络training
+ 1. 对整个网络training，修改./cfg/vgg.json中的fineturn为false
      ```sh
-     $ python train.py vgg16/vgg19
+     $ python train.py ./cfg/vgg.json
      ```
- 2. 只对最后一层fine turn
+ 2. 只对最后一层fine turn, 修改./cfg/vgg.json中的fineturn为true
      ```sh
-     $ python train.py vgg16/vgg19 {any}
+     $ python train.py ./cfg/vgg.json
+     ```
+
+## Inception V4
+### 网络结构
+ * 网络结构参考论文，非常清晰，[Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning](https://arxiv.org/abs/1602.07261)
+ * 代码实现也可以参考google tensorflow中的实现，[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v4.py)
+### 网络训练
+      ```sh
+     $ python train.py ./cfg/inception-v4.json
      ```
