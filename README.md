@@ -32,7 +32,7 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
 ## Inception V4
 ### 网络结构
  * 网络结构参考论文，非常清晰，[Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning](https://arxiv.org/abs/1602.07261)
- * 代码实现也可以参考google tensorflow中的实现，[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v4.py)
+ * 代码实现参考google tensorflow中的实现，[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v4.py)
 ### 网络训练
       ```sh
      $ python train.py ./cfg/inception-v4.json
