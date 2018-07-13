@@ -9,5 +9,6 @@
 	"modelpath": "./models/vgg19.npy",
 	"mean": [103.939, 116.779, 123.68],
 	"fineturn": "true",
-	"isvgg19": "true"
+	"isvgg19": "true",
+	"optimizer": "default"
 }

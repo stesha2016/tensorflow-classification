@@ -3,7 +3,8 @@
 	"batchsize": 8,
 	"width": 299,
 	"height": 299,
-	"learningrate": 0.01,
+	"learningrate": 0.001,
 	"valpath": "./data/my_vgg_data/val.txt",
-	"trainpath": "./data/my_vgg_data/train.txt"
+	"trainpath": "./data/my_vgg_data/train.txt",
+	"optimizer": "default"
 }

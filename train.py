@@ -76,10 +76,16 @@ def train(cfg_path):
 
 	if network == 'vgg' and cfg['fineturn'] == 'true':
 		T_list = tf.trainable_variables()
-		fc8_list = [var for var in T_list if var.name.startswith('fc8')]
-		optim = tf.train.GradientDescentOptimizer(learning_rate=cfg['learningrate']).minimize(loss, var_list=fc8_list)
+		V_list = [var for var in T_list if var.name.startswith('fc8')]
 	else:
-		optim = tf.train.GradientDescentOptimizer(learning_rate=cfg['learningrate']).minimize(loss, var_list=tf.trainable_variables())
+		V_list = tf.trainable_variables()
+
+	if cfg['optimizer'] == 'RMSProp':
+		print('Optimizer is RMSProp')
+		optim = tf.train.RMSPropOptimizer(learning_rate=cfg['learningrate'], epsilon=1.0).minimize(loss, var_list=V_list)
+	else:
+		print('Optimizer is GradientDescent')
+		optim = tf.train.GradientDescentOptimizer(learning_rate=cfg['learningrate']).minimize(loss, var_list=V_list)
 
 	print('prepare data...')
 	file_list = utils.load_data(cfg['trainpath'])
