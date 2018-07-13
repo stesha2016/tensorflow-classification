@@ -1,0 +1,9 @@
+{
+	"net": "inceptionResnetV2",
+	"batchsize": 8,
+	"width": 299,
+	"height": 299,
+	"learningrate": 0.01,
+	"valpath": "./data/my_vgg_data/val.txt",
+	"trainpath": "./data/my_vgg_data/train.txt"
+}

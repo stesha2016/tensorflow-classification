@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import networks.vgg as vgg
 import networks.inception_v4 as inceptionV4
+import networks.inception_resnet_v2 as inceptionResnetV2
 import src.utils as utils
 import random
 
@@ -59,6 +60,10 @@ def train(cfg_path):
 		predictions, logits = inceptionV4.inception_v4(x, len(classes_id))
 		loss = inceptionV4.losses(y, logits)
 		accurracy = inceptionV4.accurracy(y, logits)
+	elif network == 'inceptionResnetV2':
+		predictions, logits = inceptionResnetV2.inception_resnet_v2(x, len(classes_id))
+		loss = inceptionResnetV2.losses(y, logits)
+		accurracy = inceptionResnetV2.accurracy(y, logits)
 	else:
 		loss = 0
 		accurracy = 0
@@ -91,15 +96,18 @@ def train(cfg_path):
 			vgg_network.loadModel(sess, True)
 		epoch = 0
 		iteration = 0
+		loss_mean = 0
 		while epoch < epoch_iter:
 			iteration += 1
 			epoch, images, labels = next(batch)
 			if network == 'vgg':
 				images = images - np.array(cfg['mean']).reshape(1, 1, 1, 3)
 			loss_curr, summary, _ = sess.run([loss, merge, optim], feed_dict={x: images, y: labels})
+			loss_mean += loss_curr
 			writer.add_summary(summary, iteration)
 			if (iteration % 500 == 0):
-				print('epoch/iter: [{}/{}], loss_curr: {}'.format(epoch, iteration, loss_curr))
+				print('epoch/iter: [{}/{}], loss_mean: {}'.format(epoch, iteration, loss_mean/500))
+				loss_mean = 0
 				_, val_images, val_labels = next(val_batch)
 				if network == 'vgg':
 					val_images = val_images - np.array(cfg['mean']).reshape(1, 1, 1, 3)
