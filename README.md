@@ -37,3 +37,12 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
       ```sh
      $ python train.py ./cfg/inception-v4.json
      ```
+## Inception Resnet V2
+### 网络结构
+ * 网络结构参考论文:[Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning](https://arxiv.org/abs/1602.07261)
+ * 论文中的网络有些细节有点错误，会导致resnet的block17和block8因为channel不匹配而无法相加，channel的数量可以根据实际情况来调整。
+ * 代码实现部分参考google tensorflow中的实现，但是tensorflow中的网络实现其实和论文中差别很大，本文的实现还是尽量按照论文中的网络结构[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_resnet_v2.py)
+### 网络训练
+      ```sh
+     $ python train.py ./cfg/inception-resnet-v2.json
+     ```
