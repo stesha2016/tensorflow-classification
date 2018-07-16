@@ -46,3 +46,9 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
       ```sh
      $ python train.py ./cfg/inception-resnet-v2.json
      ```
+## Resnet V2
+### block结构
+ * block结构参考论文:[Identity Mappings in Deep Residual Networks](https://arxiv.org/abs/1603.05027)
+ 论文主要就是尝试那种block能够提升网络效果。经过多中尝试和数据分析后认为block结构从a改进为b会提升网络效果。
+ [original resdual unit]()
+ [full pre-activation unit]()
