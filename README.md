@@ -100,12 +100,20 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  ![dw block](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-1.png)
  
  假设input数据为DFxDfxM，kernel为DkxDk,output为DGxDGxN
+ 
  因此原始的计算量为DKxDKxMxDFxDFxN,改进后的计算量为DkxDKxDFxDFxM+DFxDFxMxN
+ 
  [计算量比例](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-2.png)
+ 
  如果DK为3，则可以缩小接近8／9的计算量
  2. 网络结构
+ 
  [block structure](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-3.png)
+ 
  [network structure](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-4.png)
+ 
  3. 提出了两种参数width multiplier和resolution multiplier
+ 
  width multiplier取值范围0到1之间，用做缩小input channel和output channel -> width multiplier * M, width multiplier * N
+ 
  resolution mulitplier取值范围在0到1之间，用来做小input的size -> resolution multiplier * DF
