@@ -4,6 +4,7 @@ import numpy as np
 import networks.vgg as vgg
 import networks.inception_v4 as inceptionV4
 import networks.inception_resnet_v2 as inceptionResnetV2
+import networks.resnet_v2 as resnetv2
 import src.utils as utils
 import random
 
@@ -64,6 +65,10 @@ def train(cfg_path):
 		predictions, logits = inceptionResnetV2.inception_resnet_v2(x, len(classes_id))
 		loss = inceptionResnetV2.losses(y, logits)
 		accurracy = inceptionResnetV2.accurracy(y, logits)
+	elif network == 'resnetv2':
+		predictions, logits = resnetv2.resnet_v2_50(x, len(classes_id))
+		loss = resnetv2.losses(y, logits)
+		accurracy = resnetv2.accurracy(y, logits)
 	else:
 		loss = 0
 		accurracy = 0

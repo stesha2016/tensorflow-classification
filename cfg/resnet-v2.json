@@ -1,0 +1,10 @@
+{
+	"net": "resnetv2",
+	"batchsize": 8,
+	"width": 224,
+	"height": 224,
+	"learningrate": 0.001,
+	"valpath": "./data/my_vgg_data/val.txt",
+	"trainpath": "./data/my_vgg_data/train.txt",
+	"optimizer": "default"
+}
