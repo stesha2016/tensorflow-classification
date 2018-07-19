@@ -40,8 +40,8 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
 ## Inception Resnet V2
 ### 网络结构
  * 网络结构参考论文:[Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning](https://arxiv.org/abs/1602.07261)
- * 论文中的网络有些细节有点错误，会导致resnet的block17和block8因为channel不匹配而无法相加，channel的数量可以根据实际情况来调整。
- * 代码实现部分参考google tensorflow中的实现，但是tensorflow中的网络实现其实和论文中差别很大，本文的实现还是尽量按照论文中的网络结构[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_resnet_v2.py)
+ * 论文中的网络结构细节处有错误，会导致resnet的block17和block8因为channel不匹配而无法相加，代码实现中做了修改。
+ * goole tensorflow中的网络实现和论文中差别很大，本文的实现还是尽量按照论文中的网络结构[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_resnet_v2.py)
 ### 网络训练
       ```sh
      $ python train.py ./cfg/inception-resnet-v2.json
@@ -50,5 +50,47 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
 ### block结构
  * block结构参考论文:[Identity Mappings in Deep Residual Networks](https://arxiv.org/abs/1603.05027)
  
- 论文主要就是尝试那种block能够提升网络效果。经过多中尝试和数据分析后认为block结构从a改进为b会提升网络效果。
+ 论文主要就是尝试哪种block结构能够提升网络性能。经过多种尝试和数据分析后认为block结构从a改进为b会提升网络效果。
  ![orginal residual unit -> proposed residual unit](https://github.com/stesha2016/tensorflow-classification/blob/master/image/residual_unit.png)
+ * 代码实现参考了[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/resnet_v2.py)
+ 
+ google的代码实现比较炫技,不过确实扩展网络非常容易,从resnet_50到resnet_200只需要调整几个参数就可以实现.
+ 
+ 另外解释一下50层,101层等的组成
+ 50层: (3+4+6+3)*3 + 2 = 50 每个block有3个conv层,还要加上block开始之前的1层和block结束后的1层
+> blocks = [
+ 	resnet_v2_block('block1', base_depth=64, num_units=3, stride=2),	
+ 	resnet_v2_block('block2', base_depth=128, num_units=4, stride=2),	
+	resnet_v2_block('block3', base_depth=256, num_units=6, stride=2),	
+	resnet_v2_block('block4', base_depth=512, num_units=3, stride=1)
+ ]
+
+ 101层: (3+4+23+3)*3 + 2 = 101
+> blocks = [
+	resnet_v2_block('block1', base_depth=64, num_units=3, stride=2),
+	resnet_v2_block('block2', base_depth=128, num_units=4, stride=2),
+	resnet_v2_block('block3', base_depth=256, num_units=23, stride=2),
+	resnet_v2_block('block4', base_depth=512, num_units=3, stride=1)
+]
+
+ 152层: (3+8+36+3)*3 + 2 = 152
+> blocks = [
+	resnet_v2_block('block1', base_depth=64, num_units=3, stride=2),
+	resnet_v2_block('block2', base_depth=128, num_units=8, stride=2),
+	resnet_v2_block('block3', base_depth=256, num_units=36, stride=2),
+	resnet_v2_block('block4', base_depth=512, num_units=3, stride=1)
+]
+
+ 200层: (3+24+36+3)*3 + 2 = 200
+> blocks = [
+	resnet_v2_block('block1', base_depth=64, num_units=3, stride=2),
+	resnet_v2_block('block2', base_depth=128, num_units=24, stride=2),
+	resnet_v2_block('block3', base_depth=256, num_units=36, stride=2),
+	resnet_v2_block('block4', base_depth=512, num_units=3, stride=1)
+]
+### 网络训练
+      ```sh
+     $ python train.py ./cfg/resnet-v2.json
+     ```
+## MobileNet v1
+###[论文解析](https://arxiv.org/abs/1704.04861)
