@@ -55,12 +55,16 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  * 代码实现参考了[reference code](https://github.com/tensorflow/models/blob/master/research/slim/nets/resnet_v2.py)
  
  google的代码实现比较炫技,不过确实扩展网络非常容易,从resnet_50到resnet_200只需要调整几个参数就可以实现.
+ 
  另外解释一下50层,101层等的组成
  50层: (3+4+6+3)*3 + 2 = 50 每个block有3个conv层,还要加上block开始之前的1层和block结束后的1层
 > blocks = [
  	resnet_v2_block('block1', base_depth=64, num_units=3, stride=2),
+	
 	resnet_v2_block('block2', base_depth=128, num_units=4, stride=2),
+	
 	resnet_v2_block('block3', base_depth=256, num_units=6, stride=2),
+	
 	resnet_v2_block('block4', base_depth=512, num_units=3, stride=1)
  ]
 
