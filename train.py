@@ -5,6 +5,7 @@ import networks.vgg as vgg
 import networks.inception_v4 as inceptionV4
 import networks.inception_resnet_v2 as inceptionResnetV2
 import networks.resnet_v2 as resnetv2
+import networks.mobilenet_v1 as mobilenetv1
 import src.utils as utils
 import random
 
@@ -13,6 +14,7 @@ classes_id = ['n00007846', 'n00141669', 'n00477639', 'n01443537', 'n01495701', '
 epoch_iter = 200
 Mean = np.array([103.939, 116.779, 123.68]).reshape((1, 1, 3))
 tensorboard = True
+slim = tf.contrib.slim
 def minibatch(file_list, batchsize, w, h):
 	length = len(file_list)
 	i = 0
@@ -45,10 +47,15 @@ def minibatch(file_list, batchsize, w, h):
 
 def train(cfg_path):
 	cfg = utils.get_cfg(cfg_path)
-	print('prepare network...')
-	x = tf.placeholder(dtype=tf.float32, shape=[None, cfg['height'], cfg['width'], 3])
-	y = tf.placeholder(dtype=tf.float32, shape=[None, len(classes_id)])
 	network = cfg['net']
+	print('prepare network...')
+	w = cfg['width']
+	h = cfg['height']
+	if network == 'mobilenetv1':
+		w = int(w * cfg['resolution_multiplier'])
+		h = int(h * cfg['resolution_multiplier'])
+	x = tf.placeholder(dtype=tf.float32, shape=[None, h, w, 3])
+	y = tf.placeholder(dtype=tf.float32, shape=[None, len(classes_id)])
 	if network == 'vgg':
 		if cfg['isvgg19'] == 'true':
 			vgg_network = vgg.Vgg(x, len(classes_id), True, cfg['modelpath'])
@@ -69,6 +76,10 @@ def train(cfg_path):
 		predictions, logits = resnetv2.resnet_v2_50(x, len(classes_id))
 		loss = resnetv2.losses(y, logits)
 		accurracy = resnetv2.accurracy(y, logits)
+	elif network == 'mobilenetv1':
+		predictions, logits = mobilenetv1.mobilenet_v1(x, len(classes_id), depth_multiplier=cfg['depth_multiplier'])
+		loss = mobilenetv1.losses(y, logits)
+		accurracy = mobilenetv1.accurracy(y, logits)
 	else:
 		loss = 0
 		accurracy = 0
@@ -124,7 +135,7 @@ def train(cfg_path):
 					val_images = val_images - np.array(cfg['mean']).reshape(1, 1, 1, 3)
 				cc = sess.run(accurracy, feed_dict={x: val_images, y: val_labels})
 				print('accurracy: {}'.format(cc))
-		writer.close()	
+		writer.close()
 
 def main():
 	assert(len(sys.argv) > 1)
