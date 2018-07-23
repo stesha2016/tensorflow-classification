@@ -92,7 +92,7 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
       ```sh
      $ python train.py ./cfg/resnet-v2.json
      ```
-## MobileNet v1
+## MobileNet V1
 ### 论文解析
 * [论文地址](https://arxiv.org/abs/1704.04861)
 * 论文中跟网络结构相关的主要有三个部分，其他的内容都是一些网络性能比较
@@ -108,3 +108,15 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
 #### 3.提出了两种参数width multiplier和resolution multiplier
  * width multiplier取值范围0到1之间，用做缩小input channel和output channel -> width multiplier * M, width multiplier * N
  * resolution mulitplier取值范围在0到1之间，用来做小input的size -> resolution multiplier * DF
+### 代码实现
+ 同样参考google代码的实现，用一个_CONV_DEFS展示了网络结构。但是与google的代码稍微有一点不一样，最后一行的DepthSepConv按照论文来实现应该是2，但是google的代码1，不知道是不是改进，不过这里还是按照论文来实现。
+### 网络训练 
+      ```sh
+     $ python train.py ./cfg/mobilenet_v1.json
+     ``` 
+### MobileNet V2 
+#### 论文解析
+ * [论文地址](https://arxiv.org/abs/1801.04381)
+ * 论文是针对mobilenet v1进行精确度提高的改进。因为depthwise convolution是不能改变channel的，如果上一层的channel比较小，那在DW层的运算就是基于比较小的channel进行，导致学习的特征不多。因此作者的改进思路就是先进行channel升维，然后用DW进行传递，接着对channel进行降维。并且因为最后一层只是要做降维，所以进行linear的activation。
+ * MobileNetV1: DW -> PW
+ * MobileNetV2: PW -> DW -> PW(Linear)
