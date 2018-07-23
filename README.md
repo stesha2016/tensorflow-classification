@@ -131,8 +131,8 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  
  > HxWx(tK) ----1x1 PW Linear----> HxWxD'
  
- > 计算量：H*W*D*(tK) + K*K*H*W*(tK) + H*W*(tK)*D' = H*W*(tK)*(D + K^2 + D')
+ > 计算量：HxWxDx(tK) + KxKxHxWx(tK) + HxWx(tK)xD' = HxWx(tK)x(D + K^2 + D')
  * 网络结构
- [网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-02.png)
+ ![网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-02.png)
  s为2的第一层为2，后面的repeat s为1
  * 从google实现的源码中可以看出，对于channel基本上是除以8后，分成不同的block进行计算的。比如112x112x16会分割成112x112x8和112x112x8两个block进行计算
