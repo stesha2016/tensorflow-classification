@@ -98,7 +98,7 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
 * 论文中跟网络结构相关的主要有三个部分，其他的内容都是一些网络性能比较
 #### 1.引入了一种depthwise convolution的网络结构，将原本的convolution变成了两个结构。一个是depthwise convolution(b),一个是1x1 pointwise convolution(c)
  ![dw block](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-1.png)
- * 假设input数据为DFxDfxM，kernel为DkxDk,output为DGxDGxN
+ * 假设input数据为DFxDFxM，kernel为DkxDk,output为DGxDGxN
  * 因此原始的计算量为DKxDKxMxDFxDFxN,改进后的计算量为DkxDKxDFxDFxM+DFxDFxMxN
  ![计算量比例](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv1-2.png)
  如果DK为3，则可以缩小接近8／9的计算量
@@ -120,3 +120,15 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  * 论文是针对mobilenet v1进行精确度提高的改进。因为depthwise convolution是不能改变channel的，如果上一层的channel比较小，那在DW层的运算就是基于比较小的channel进行，导致学习的特征不多。因此作者的改进思路就是先进行channel升维，然后用DW进行传递，接着对channel进行降维。并且因为最后一层只是要做降维，所以进行linear的activation。
  * MobileNetV1: DW -> PW
  * MobileNetV2: PW -> DW -> PW(Linear)
+ ![网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-01.png)
+ 有两种结构，一种是stride为1时，block和residual block类似，另一种是stride为2时的block
+ * 计算量计算
+ > 从HxWxD经过计算成为HxWxD'有如下三个步骤
+ > HxWxD ----1x1 PW Relu6----> HxWx(tK)
+ > HxWx(tK) ----KxK DW Relu6----> HxWx(tK)
+ > HxWx(tK) ----1x1 PW Linear----> HxWxD'
+ > 计算量：H*W*D*(tK) + K*K*H*W*(tK) + H*W*(tK)*D' = H*W*(tK)*(D + K^2 + D')
+ * 网络结构
+ [网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-02.png)
+ s为2的第一层为2，后面的repeat s为1
+ * 从google实现的源码中可以看出，对于channel基本上是除以8后，分成不同的block进行计算的。比如112x112x16会分割成112x112x8和112x112x8两个block进行计算
