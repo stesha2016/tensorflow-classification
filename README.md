@@ -130,6 +130,7 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  > HxWx(tK) ----KxK DW Relu6----> HxWx(tK)
  
  > HxWx(tK) ----1x1 PW Linear----> HxWxD'
+ 
  > 计算量：H*W*D*(tK) + K*K*H*W*(tK) + H*W*(tK)*D' = H*W*(tK)*(D + K^2 + D')
  * 网络结构
  [网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-02.png)
