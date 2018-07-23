@@ -124,8 +124,11 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  有两种结构，一种是stride为1时，block和residual block类似，另一种是stride为2时的block
  * 计算量计算
  > 从HxWxD经过计算成为HxWxD'有如下三个步骤
+ 
  > HxWxD ----1x1 PW Relu6----> HxWx(tK)
+ 
  > HxWx(tK) ----KxK DW Relu6----> HxWx(tK)
+ 
  > HxWx(tK) ----1x1 PW Linear----> HxWxD'
  > 计算量：H*W*D*(tK) + K*K*H*W*(tK) + H*W*(tK)*D' = H*W*(tK)*(D + K^2 + D')
  * 网络结构
