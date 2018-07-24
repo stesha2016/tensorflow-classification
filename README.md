@@ -154,3 +154,6 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  * Bottleneck layers:每一个节点output的channel是k，但是input可以会非常大，所以可以加一个1x1Conv做bottleneck的效果。BN-Relu-1x1Conv-BN-Relu-3x3Conv,让1x1Conv的output channel为4k。这种block叫做DenseNet-B
  * Compression:用取值于0到1之间的thelta在transition layers压缩featrue maps。这种结构叫做DenseNet-C
  * 论文最后国际惯例用数据展示了Densenet和其他网络的结果对比，可以看出在参数量变少的情况下精确度还有提升。
+## SENet
+[论文解析](http://www.sohu.com/a/161633191_465975)
+看原作者写的介绍，非常清晰。
