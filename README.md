@@ -143,6 +143,7 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  * 作者还是从resnet得到启发，resnet是将第l-1层的output与第l层的output相加，而densenet是将l层之前没一层的output都与第l层进行concat。区别主要点：
   1. l之前没一层的特征信息都会被l层吸收
   2. 是用concat进行数据合并，而不是用+进行相加
+
  * 论文中的主要图片
  ![block](https://github.com/stesha2016/tensorflow-classification/blob/master/image/densenet-1.png)
  ![network structure](https://github.com/stesha2016/tensorflow-classification/blob/master/image/densenet-2.png)
