@@ -114,8 +114,8 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
       ```sh
      $ python train.py ./cfg/mobilenet_v1.json
      ``` 
-### MobileNet V2 
-#### 论文解析
+## MobileNet V2 
+### 论文解析
  * [论文地址](https://arxiv.org/abs/1801.04381)
  * 论文是针对mobilenet v1进行精确度提高的改进。因为depthwise convolution是不能改变channel的，如果上一层的channel比较小，那在DW层的运算就是基于比较小的channel进行，导致学习的特征不多。因此作者的改进思路就是先进行channel升维，然后用DW进行传递，接着对channel进行降维。并且因为最后一层只是要做降维，所以进行linear的activation。
  * MobileNetV1: DW -> PW
@@ -136,3 +136,20 @@ $ (288, 0.0001896271, 'leopard, Panthera pardus')
  ![网络结构](https://github.com/stesha2016/tensorflow-classification/blob/master/image/mobilenetv2-02.png)
  s为2的第一层为2，后面的repeat s为1
  * 从google实现的源码中可以看出，对于channel基本上是除以8后，分成不同的block进行计算的。比如112x112x16会分割成112x112x8和112x112x8两个block进行计算
+
+## DenseNet
+### 论文解析
+ * [论文地址](https://arxiv.org/abs/1608.06993)
+ * 作者还是从resnet得到启发，resnet是将第l-1层的output与第l层的output相加，而densenet是将l层之前没一层的output都与第l层进行concat。区别主要亮点：
+ 1. l之前没一层的特征信息都会被l层吸收
+ 2. 是用concat进行数据合并，而不是用+进行相加
+ * 两张图片
+ ![block](https://github.com/stesha2016/tensorflow-classification/blob/master/image/densenet-1.png)
+ ![network structure](https://github.com/stesha2016/tensorflow-classification/blob/master/image/densenet-2.png)
+ ![network for imagenet](https://github.com/stesha2016/tensorflow-classification/blob/master/image/densenet-3.png)
+ * Composite function:dense block中没一层的连接方式，BN+Relu+3x3Conv
+ * transition layers:dense block之间的连接是不能改变feature size的，因为需要pooling layers来做down-sampling。blocks之间的连接叫做transition layers,是BN+1x1Conv+2x2Avrg_pool
+ * Growth rate:如果k0是一个block的input，则output为k0+k*(l-1)，k就是dense block中没一层的channel，是一个超参数，一般可以设置为12，24.代表着保留多少信息量
+ * Bottleneck layers:每一个节点output的channel是k，但是input可以会非常大，所以可以加一个1x1Conv做bottleneck的效果。BN-Relu-1x1Conv-BN-Relu-3x3Conv,让1x1Conv的output channel为4k。这种block叫做DenseNet-B
+ * Compression:用取值于0到1之间的thelta在transition layers压缩featrue maps。这种结构叫做DenseNet-C
+ * 论文最后国际惯例用数据展示了Densenet和其他网络的结果对比，可以看出在参数量变少的情况下精确度还有提升。
