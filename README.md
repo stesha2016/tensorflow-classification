@@ -20,11 +20,11 @@ $ (340, 0.00023462022, 'zebra')
 $ (288, 0.0001896271, 'leopard, Panthera pardus')
 ```
  ### 用vgg网络对自己的数据进行training
- 1. 对整个网络training，修改./cfg/vgg.json中的fineturn为false
+ 1. 对整个网络training，修改./cfg/vgg.json中的finetuning为false
      ```sh
      $ python train.py ./cfg/vgg.json
      ```
- 2. 只对最后一层fine turn, 修改./cfg/vgg.json中的fineturn为true
+ 2. 只对最后一层fine-tuning, 修改./cfg/vgg.json中的finetuning为true
      ```sh
      $ python train.py ./cfg/vgg.json
      ```
