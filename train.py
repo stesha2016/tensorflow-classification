@@ -90,7 +90,7 @@ def train(cfg_path):
 		merge = tf.summary.merge_all()
 		writer = tf.summary.FileWriter(logdir='./summary/')
 
-	if network == 'vgg' and cfg['fineturn'] == 'true':
+	if network == 'vgg' and cfg['finetuning'] == 'true':
 		T_list = tf.trainable_variables()
 		V_list = [var for var in T_list if var.name.startswith('fc8')]
 	else:
@@ -114,7 +114,7 @@ def train(cfg_path):
 	config.gpu_options.allow_growth = True
 	with tf.Session(config=config) as sess:
 		sess.run(tf.global_variables_initializer())
-		if network == 'vgg' and cfg['fineturn'] == 'true':
+		if network == 'vgg' and cfg['finetuning'] == 'true':
 			vgg_network.loadModel(sess, True)
 		epoch = 0
 		iteration = 0
