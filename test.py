@@ -14,7 +14,7 @@ def test_vgg(fn, vgg19=False):
 	else:
 		model = modelPath16
 	vgg16 = vgg.Vgg(x, 1000, vgg19, model)
-	prob = vgg16.build()
+	prob = vgg16.build(False)
 	img = utils.load_image(fn, 224, 224)
 	Mean = np.array([103.939, 116.779, 123.68])
 	img = img - Mean

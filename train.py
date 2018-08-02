@@ -27,7 +27,7 @@ def minibatch(file_list, batchsize, w, h):
 			i = 0
 		images = []
 		labels = []
-		for j in range(i, i+batchsize):
+		for j in xrange(i, i+batchsize):
 			content = file_list[j]
 			npos = content.index(',')
 			path = content[:npos]

@@ -31,7 +31,7 @@ class Vgg():
 		self.vgg19 = isvgg19
 		self.modelpath = modelpath
 
-	def build(self):
+	def build(self, isTraining=True):
 		# 224x224x3 -> 224x224x64 -> 224x224x64 -> 112x112x64
 		conv1_1 = conv_layer(self.input_x, 64, 3, name='conv1_1')
 		conv1_2 = conv_layer(conv1_1, 64, 3, name='conv1_2')
@@ -75,14 +75,16 @@ class Vgg():
 		fc_in = tf.reshape(pool5, [-1, 7*7*512])
 		# 7*7*512 -> 4096
 		fc6 = fc_layer(fc_in, 7*7*512, 4096, name='fc6', relu=True)
-		dropout1 = dropout(fc6, 0.5)
+		if isTraining:
+			fc6 = dropout(fc6, 0.5)
 
 		# 4096 -> 4096
-		fc7 = fc_layer(dropout1, 4096, 4096, name='fc7', relu=True)
-		dropout2 = dropout(fc7, 0.5)
+		fc7 = fc_layer(fc6, 4096, 4096, name='fc7', relu=True)
+		if isTraining:
+			fc7 = dropout(fc7, 0.5)
 
 		# 4096 -> class number
-		fc8 = fc_layer(dropout2, 4096, self.class_num, name='fc8', relu=False)
+		fc8 = fc_layer(fc7, 4096, self.class_num, name='fc8', relu=False)
 
 		prob = tf.nn.softmax(fc8, name='prob')
 		return prob, fc8
